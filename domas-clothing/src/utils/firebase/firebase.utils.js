@@ -8,7 +8,8 @@ import { initializeApp } from "firebase/app";
      getAuth,
      signInWithRedirect,
      signInWithPopup,
-     GoogleAuthProvider 
+     GoogleAuthProvider,
+     createUserWithEmailAndPassword,
  } from "firebase/auth";
 
 // (7) after setting up database called firestore import this
@@ -34,15 +35,17 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 
 // (5) add authentication
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
+
 // how should googleAuthProvider behave?
-provider.setCustomParameters( {
+googleProvider.setCustomParameters( {
     // user should always select account
     prompt: "select_account"
 })
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 // (6) go back to browser click "continue to console" > Authentication (left side navi) > Get started > Sign-in-method > Google
 // Sign-in provides > Enable (right top button) > enter project support email >> now it should have Status: Enabled
@@ -53,7 +56,14 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 export const db = getFirestore();
 
 // create our users when authenticating
-export const createUserDocumentFromAuth = async ( userAuth ) => {
+// additionalInformation: object > if displayName has no value (with sign-up) we add additional information ourself
+export const createUserDocumentFromAuth = async ( 
+    userAuth, 
+    additionalInformation ={} ) => {
+
+    // if userAuth not present then do not run the function
+    if(!userAuth) return;
+
     // is there an existing document reference
     // identifier comes from logGoogleUser object > user > uid
     const userDocRef = doc(db, "users", userAuth.uid); // doc(db, collection, identifier)
@@ -78,7 +88,8 @@ export const createUserDocumentFromAuth = async ( userAuth ) => {
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                ...additionalInformation,
             });
 
         } catch(error) {
@@ -91,3 +102,10 @@ export const createUserDocumentFromAuth = async ( userAuth ) => {
     
 };
 
+// create authentificated user and give back some auth object
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+
+    if (!email || !password) return;
+
+    return await createUserWithEmailAndPassword(auth, email, password)
+}
