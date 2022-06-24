@@ -1,10 +1,11 @@
 // to track input fields
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import "./sign-in-form.styles.scss";
 import Button from "../button/button.component";
 
+import { UserContext } from "../../contexts/user.context";
 
 // initalized form values
 const defaultFormFields = {
@@ -17,7 +18,10 @@ const SignInForm = () => {
     const [ formFields, setFormFields ] = useState(defaultFormFields);
     const { email, password } = formFields; 
 
-    console.log(formFields)
+    // console.log(formFields)
+
+    // context
+    const { setCurrentUser } = useContext(UserContext)
 
     const resetFormField = () => {
         setFormFields(defaultFormFields)
@@ -25,6 +29,8 @@ const SignInForm = () => {
 
     const signInWithGoogle = async () => {
         const {user} = await signInWithGooglePopup();
+        // context
+        setCurrentUser(user)
         await createUserDocumentFromAuth(user);
     }
 
@@ -32,9 +38,11 @@ const SignInForm = () => {
         event.preventDefault();
 
         try {
-            const response = await signInAuthUserWithEmailAndPassword(email,password);
-            console.log(response);
-
+            // we want to store this user object inside the Context to make it available for other components
+            const {user} = await signInAuthUserWithEmailAndPassword(email,password);
+            // context
+            setCurrentUser(user)
+            
             resetFormField();
 
         } catch(error) {

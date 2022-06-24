@@ -11,6 +11,8 @@ import { initializeApp } from "firebase/app";
      GoogleAuthProvider,
      createUserWithEmailAndPassword,
      signInWithEmailAndPassword,
+     signOut,
+     onAuthStateChanged, // hook in a stream of events (sign-in or sign-out events) > return back a listener
  } from "firebase/auth";
 
 // (7) after setting up database called firestore import this
@@ -103,6 +105,8 @@ export const createUserDocumentFromAuth = async (
     
 };
 
+// ###### helper functions ######
+
 // create authentificated user and give back some auth object
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
 
@@ -118,3 +122,7 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
     return await signInWithEmailAndPassword(auth, email, password)
 }
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback); // 2nd argument: callback that you want to call every time this auth state changes > just name it callback: whenever you instanciate give me a callback
