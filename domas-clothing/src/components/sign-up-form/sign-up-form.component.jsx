@@ -1,10 +1,10 @@
 // to track input fields
-import { useState, useContext } from "react";
+import { useState} from "react";
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 import "./sign-up.styles.scss";
 import Button from "../button/button.component";
-import { UserContext } from "../../contexts/user.context";
+// import { UserContext } from "../../contexts/user.context";
 
 // initalized form values
 const defaultFormFields = {
@@ -23,7 +23,7 @@ const SignUpForm = () => {
 
     // context
     // hook sign-up-form into sign-in-form > react will re-run the function (will just re-render if JSX values change based on changed value) >> could run into performance issues, when you have a lot of component hooked into 
-    const { setCurrentUser } = useContext(UserContext)
+    // const { setCurrentUser } = useContext(UserContext)
         // console.log("hit") // just to showcase that hit is printed after hook when sign-in form is called
 
     const resetFormField = () => {
@@ -45,7 +45,7 @@ const SignUpForm = () => {
             console.log(user);
 
             // context
-            setCurrentUser(user);
+            // setCurrentUser(user);
 
             // building user document object (in firebase database)
             await createUserDocumentFromAuth(user, { displayName });            

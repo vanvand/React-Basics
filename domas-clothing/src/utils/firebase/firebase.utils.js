@@ -12,7 +12,7 @@ import { initializeApp } from "firebase/app";
      createUserWithEmailAndPassword,
      signInWithEmailAndPassword,
      signOut,
-     onAuthStateChanged, // hook in a stream of events (sign-in or sign-out events) > return back a listener
+     onAuthStateChanged, // observerable listener: hook in a stream of events (sign-in or sign-out events) able to trigger sth based on these changes > return back a listener
  } from "firebase/auth";
 
 // (7) after setting up database called firestore import this
@@ -125,4 +125,4 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth);
 
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback); // 2nd argument: callback that you want to call every time this auth state changes > just name it callback: whenever you instanciate give me a callback
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback); // 2nd argument: callback that you want to call every time this auth state changes (e.g. when user sign in considered as change and callback is running > user sign out, callback is running) > whenever you instanciate give me a callback
