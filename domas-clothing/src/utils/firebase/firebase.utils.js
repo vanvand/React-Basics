@@ -13,7 +13,10 @@ import { initializeApp } from "firebase/app";
      signInWithEmailAndPassword,
      signOut,
      onAuthStateChanged, // observerable listener: hook in a stream of events (sign-in or sign-out events) able to trigger sth based on these changes > return back a listener
+
  } from "firebase/auth";
+
+// important to isolate firestore/firebase methods into helper function to minimize the impact that changing third party libraries have on our code base, so we only need to apply changes here 
 
 // (7) after setting up database called firestore import this
 import {
@@ -21,6 +24,10 @@ import {
     doc, // get document instance
     getDoc, // getting document data
     setDoc, // setting document data
+    collection, // get shop data
+    writeBatch, // get shop data
+    query,
+    getDocs,
 } from "firebase/firestore"
 
 // (3) Register app to web (Web button) w/ name domas-clothing-web-app >> firebase provide you with a package > follow instructions
@@ -57,6 +64,60 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 // (7) database set-up
 export const db = getFirestore();
+
+
+// ###########################################
+
+// bring in shop data to firebase, respective useEffect in products.context.jsx
+// using async because adding to external source, calling upon API to store data
+export const addCollectionAndDocuments = async (
+    collectionKey, 
+    objectsToAdd, 
+    field,
+    // field = "title",
+    ) => {
+    // go with our db instance (like with auth) > get my collection within db and within db what specific collectionKey are you looking for
+    const collectionRef = collection(db, collectionKey);
+    
+    /*
+    transaction = successful unit of work to a database, might be multiple sets of setting values in a collection
+    example money transfer:  both of these writes have to go through to be considered as successful transaction = one unit of work, allthough two separate events happening
+    when not successfull all rights are set back and can be attempted newly
+
+    Yihua: 1000 => 900
+    - 100
+
+    Andrei: 1000 => 1100
+    +100
+    */
+
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach( (object) => {
+        // equal to calling the userdocRef method, instead passing db we pass the collectionRef (created above)
+        const docRef = doc(collectionRef, object.title.toLowerCase());// or object.[field]
+        batch.set(docRef, object);
+    });
+    // fire of batches
+    await batch.commit();
+    console.log("done");
+} 
+
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, "categories");
+
+    const q = query(collectionRef);
+    const querySnapshot = await getDocs(q);
+    const categoryMap = querySnapshot.docs.reduce( (acc, docSnapshot) => {
+        const { title, items } = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+    return categoryMap
+}
+
+// ###########################################
 
 // create our users when authenticating
 // additionalInformation: object > if displayName has no value (with sign-up) we add additional information ourself

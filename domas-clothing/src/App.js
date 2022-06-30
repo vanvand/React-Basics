@@ -14,7 +14,8 @@ const App = () =>  {
         {/* Index routes render in the parent routes outlet at the parent route's path. */}
         {/* just "index" equal to index={true} */}
         <Route index={true} element={<Home />} />
-        <Route path="shop" element={<Shop />} />
+        {/* /* enable nested routes; if your match shop/ anything that follows render the Shop > inside the Shop there are further routes */}
+        <Route path="shop/*" element={<Shop />} />
         <Route path="auth" element={<Authentication />} />
         <Route path="checkout" element={<Checkout />} />
       </Route>      
