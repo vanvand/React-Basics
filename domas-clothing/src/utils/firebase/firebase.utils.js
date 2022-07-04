@@ -3,7 +3,7 @@
 // (2) initializeApp function creates an App instance based on some type of configuration
 import { initializeApp } from "firebase/app";
 
-// (5) add authentication
+// (5) 
  import { 
      getAuth,
      signInWithRedirect,
