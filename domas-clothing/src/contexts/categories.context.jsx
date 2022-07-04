@@ -30,7 +30,7 @@ export const CategoriesProvider = ( {children} ) => {
         // because we get promise back we need to wrap await in asycn function
         const getCategoriesMap = async () => {
             const categoryMap = await getCategoriesAndDocuments();
-            console.log(categoryMap);
+            // console.log(categoryMap);
             setCategoriesMap(categoryMap)
         }
         getCategoriesMap();

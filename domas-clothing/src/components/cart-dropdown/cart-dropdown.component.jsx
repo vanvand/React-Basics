@@ -7,7 +7,7 @@ import Button from "../button/button.component";
 
 import CartItem from "../cart-item/cart-item.component";
 
-import "./cart-dropdown.styles.scss";
+import { CartDropdownContainer, EmptyMessage, CartItems } from "./cart-dropdown.styles";
 
 
 const CartDropdown = () => {
@@ -19,15 +19,21 @@ const CartDropdown = () => {
         navigate("/checkout")
     }
     return (
-        <div className="cart-dropdown-container">
-            <div className="cart-items">
-                {/* we need to map over some kind of array and for every item that we map through we want to pass it to CartItem. The array is not just products, it has quantity */}
-                {cartItems.map(item => (
-                <CartItem key={item.id} cartItem={item} />
-                ))}
-            </div>
+        <CartDropdownContainer>
+            <CartItems>
+                {cartItems.length 
+                    ? ( 
+                        // we need to map over some kind of array and for every item that we map through we want to pass it to CartItem. The array is not just products, it has quantity
+                        cartItems.map( (item) => (
+                            <CartItem key={item.id} cartItem={item} />))
+                      )
+                    : (
+                        <EmptyMessage>Your Card is empty</EmptyMessage>
+                      )
+                }            
+            </CartItems>
             <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button>
-        </div>
+        </CartDropdownContainer>
     )
 }
 

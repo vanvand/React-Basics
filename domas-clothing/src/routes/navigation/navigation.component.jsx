@@ -2,7 +2,7 @@
 import { Fragment, useContext } from "react";
 // import to use nested routes
 // Link behaves like an anchor tag
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component"
@@ -14,7 +14,10 @@ import { CartContext } from "../../contexts/cart.context";
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg"
 import { signOutUser } from "../../utils/firebase/firebase.utils"; 
 
-import "./navigation.styles.scss"
+
+// import "./navigation.styles.scss"
+// styled component
+import { NavigationContainer, LogoContainer, NavLinks, NavLink } from "./navigation.styles";
 
 const Navigation = () => {
 
@@ -32,33 +35,40 @@ const Navigation = () => {
 
   return (
     <Fragment>
-      <div className="navigation">
+      {/* <div className="navigation"> */}
+      <NavigationContainer>
 
             {/* Logo */}
-            <Link className="logo-container" to="/">
+            {/* <Link className="logo-container" to="/"> */}
+            <LogoContainer to="/">
               <CrwnLogo className="logo"/>
-            </Link>
+            </LogoContainer>
 
             {/* Navigation Links */}
-            <div className="nav-links-container">
-                <Link className="nav-link" to="/shop">
+            {/* <div className="nav-links-container"> */}
+            <NavLinks>
+                {/* <Link className="nav-link" to="/shop"> */}
+                <NavLink to="/shop">
                     SHOP
-                </Link>
+                </NavLink>
                 
                 {/* if the currentUser exist render Sign Out link, if not Sign In */}
                 {currentUser ? (
-                    <span className="nav-link" onClick={signOutUser}>SIGN OUT</span> 
+                    // <span className="nav-link" onClick={signOutUser}> 
+                    <NavLink as="span" onClick={signOutUser}>
+                      SIGN OUT
+                    </NavLink>
                   ): (
-                    <Link className="nav-link" to="/auth">SIGN IN</Link>
+                    <NavLink className="nav-link" to="/auth">SIGN IN</NavLink>
                   )}
                 
                 <CartIcon />
-            </div>
+            </NavLinks>
                     {/* CartDropdown is component > components always evaluate to truthy values 
                     >> if total thing evaluate to true > I return to you the last thing you gave me = CartDropdown. If isCartOpen false it would exit, show nothing */}
             {isCartOpen && <CartDropdown />}
             
-      </div>
+      </NavigationContainer>
       {/* rendering of nested routes */}
       <Outlet />
     </Fragment>

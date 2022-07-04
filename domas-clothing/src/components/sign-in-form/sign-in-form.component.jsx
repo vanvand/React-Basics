@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
-import "./sign-in-form.styles.scss";
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
+
+import { SignUpContainer, ButtonsContainer } from "./sign-in-form.styles";
 
 // import { UserContext } from "../../contexts/user.context";
 
@@ -68,7 +69,7 @@ const SignInForm = () => {
     }
 
     return (
-        <div className="sign-up-container">
+        <SignUpContainer>
             <h2>Already have an account?</h2>
             <span>Sign in with your email and password</span>
             <form onSubmit={handleSubmit}>
@@ -79,17 +80,17 @@ const SignInForm = () => {
                 {/* further checked, e.g lenght go here in inpt */}
 
 
-            <div className="buttons-container">               
+            <ButtonsContainer>               
                 {/* when button with type submit is clicked run onSubmit callback */}
                 {/* here you can enter the buttonType if needed, without it will be default button */}
                 <Button type="submit">Sign In</Button>
 
                 {/* type="button" needs to be added to prevent browser throwing errors behind the google sign in window */}
-                <Button type="button" buttonType="google" onClick={signInWithGoogle}>Google sign In</Button>
-            </div>
+                <Button type="button" buttonType={BUTTON_TYPE_CLASSES.google} onClick={signInWithGoogle}>Sign in with Google</Button>
+            </ButtonsContainer>
             
             </form>
-        </div>
+        </SignUpContainer>
     )
 }
 

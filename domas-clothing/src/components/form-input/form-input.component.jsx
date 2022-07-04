@@ -1,11 +1,10 @@
-import "./from-input.style.scss"
+import { FormInputLabel, Input, Group } from "./from-input.style";
 
 const FormInput = ( {label, ...otherProps }) => {
     return (
-    <div className="group">
+    <Group>
 
-        <input
-            className="form-input" 
+        <Input 
             // instead of this > use spread operator
             // type="text" required onChange={handleChange} name="displayName" value={displayName}
             { ...otherProps }
@@ -14,17 +13,17 @@ const FormInput = ( {label, ...otherProps }) => {
         {/* if label exist, then render this */}
         { label && (  
         
-        <label 
+        <FormInputLabel
             // if value.length not zero, means it exists (=user typed sth) then I want the label to shrink
-            className={`${
-                otherProps.value.length ? "shrink" : ""
-                } form-input-label`}
-        >
+            // className={`${
+            //     otherProps.value.length ? "shrink" : ""
+            //     } form-input-label`}
+            shrink={otherProps.value.length}>
             {label}
-        </label>
+        </FormInputLabel>
         )}
         
-    </div>
+    </Group>
     );
 };
 
