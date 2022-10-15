@@ -1,4 +1,4 @@
-// When button gets clicked by user chane name from Vanessa to Julian
+// When button gets clicked by user change name from Vanessa to Andrei
 
 import React, { Component } from 'react'
 
@@ -8,9 +8,8 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      // name: "Vanessa",
       name: {firstname: "Vanessa", lastname: "Domas"},
-      company: "ZTM"
+      company: "DreamFactory"
     }
   }
 
@@ -18,7 +17,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
 
           <p>Hi {this.state.name.firstname} {this.state.name.lastname}, I work at {this.state.company}</p>
 
@@ -38,11 +37,11 @@ export default class App extends Component {
 
             // ###########  ideal way to write setState in class component   ###########
 
-            // once this console.log ran, we still seeing our old object values (Vanessa Domas) in the console, allthough the UI is rerendered and showing correct values (Andrei Neaogie)
+            // once this console.log ran, we still seeing our old object values (Vanessa Domas) in the console, although the UI is rerendered and showing correct values (Andrei Neaogie)
             // JavaScript code typically happens in synchronous manner, meaning that it runs one by one, so in our callback function we're expecting we update the state and THEN console.log this start state
-            // BUUUT state is not updated when console.log runs >> React batches these different setState calls so that is can determine what's the most optimal strategy for re-rendering the website is going to be (more performant) >> because one interaction might update the state of mulitple components > run in asynchronous manner
+            // BUUUT state is not updated when console.log runs >> React batches these different setState calls so that is can determine what's the most optimal strategy for re-rendering the website is going to be (more performant) >> because one interaction might update the state of multiple components > run in asynchronous manner
 
-            // we can pass two different arguments to setState: a function and a callback >> with that you are able to get a more consistent synchronoous behaviour
+            // we can pass two different arguments to setState: a function and a callback >> with that you are able to get a more consistent synchronous behavior
             // first function will perform the shallow merge
             // 2nd function = callback function make sure that the console.log is run AFTER the state is updated
             this.setState( 
